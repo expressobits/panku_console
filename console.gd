@@ -16,6 +16,10 @@ class_name PankuConsole extends CanvasLayer
 signal repl_visible_about_to_change(is_visible:bool)
 signal repl_visible_changed(is_visible:bool)
 
+# Global singleton name is buggy in Godot 4.0, so we get the singleton by path instead.
+const SingletonName = "Console"
+const SingletonPath = "/root/" + SingletonName
+
 #Static helper classes
 const Config = preload("res://addons/panku_console/components/config.gd")
 const Utils = preload("res://addons/panku_console/components/utils.gd")
@@ -88,6 +92,9 @@ var _envs = {}
 var _envs_info = {}
 var _expression = Expression.new()
 
+# The current scene root node, which will be updated automatically when the scene changes.
+var _current_scene_root:Node
+
 ## Register an environment that run expressions.
 ## [br][code]env_name[/code]: the name of the environment
 ## [br][code]env[/code]: The base instance that runs the expressions. For exmaple your player node.
@@ -115,7 +122,7 @@ func remove_env(env_name:String):
 		for k in _envs_info.keys():
 			if k.begins_with(env_name + "."):
 				_envs_info.erase(k)
-	notify("[color=green][Info][/color] [b]%s[/b] env unloaded!"%env_name)
+	#notify("[color=green][Info][/color] [b]%s[/b] env unloaded!"%env_name)
 
 ## Generate a notification
 func notify(any) -> void:
@@ -204,7 +211,7 @@ func show_intro():
 	output("")
 	output("[b][color=#478cbf]❤️Contributors[/color][/b]: 🔗[url=https://github.com/Ark2000]Ark2000(Feo Wu)[/url], 🔗[url=https://github.com/scriptsengineer]scriptengineer(Rafael Correa)[/url], 🔗[url=https://github.com/winston-yallow]winston-yallow(Winston)[/url], 🔗[url=https://github.com/CheapMeow]CheapMeow[/url].")
 	output("")
-	output("> Hello, type [b]help[/b] for help")
+	output("> Tips: you can always access current scene root by `[b]current[/b]`.")
 	output("")
 
 func open_expression_key_mapper():
@@ -264,10 +271,24 @@ func _ready():
 
 	load_data()
 
+	setup_scene_root_tracker()
+
 func _notification(what):
 	#quit event
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		save_data()
+
+# always register the current scene root as `current`
+func setup_scene_root_tracker():
+	_current_scene_root = get_tree().root.get_child(get_tree().root.get_child_count() - 1)
+	register_env("current", _current_scene_root)
+	create_tween().set_loops().tween_callback(
+		func(): 
+			var r = get_tree().root.get_child(get_tree().root.get_child_count() - 1)
+			if r != _current_scene_root:
+				_current_scene_root = r
+				register_env("current", _current_scene_root)
+	).set_delay(0.1)
 
 func load_data():
 	#load configs
@@ -286,10 +307,10 @@ func load_data():
 	unified_visibility = cfg.get(Utils.CFG_UNIFIED_VISIBILITY, false)
 
 	var blur_effect = cfg.get(Utils.CFG_WINDOW_BLUR_EFFECT, true)
-	Console._full_repl.material.set("shader_parameter/lod", 4.0 if blur_effect else 0.0)
+	_full_repl.material.set("shader_parameter/lod", 4.0 if blur_effect else 0.0)
 
 	var base_color = cfg.get(Utils.CFG_WINDOW_BASE_COLOR, Color(0, 0, 0, 0.7))
-	Console._full_repl.material.set("shader_parameter/modulate", base_color)
+	_full_repl.material.set("shader_parameter/modulate", base_color)
 
 	var shadow = cfg.get(Utils.CFG_OUTPUT_OVERLAY_FONT_SHADOW, false)
 	output_overlay.set("theme_override_colors/font_shadow_color", Color.BLACK if shadow else null)
