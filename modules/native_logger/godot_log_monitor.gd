@@ -1,9 +1,10 @@
 extends Node
+class_name GodotLogMonitor
 #Monitor built-in logs
 
-signal error_msg_received(msg:String)
-signal warning_msg_received(msg:String)
-signal info_msg_received(msg:String)
+signal error_msg_received(msg : String)
+signal warning_msg_received(msg : String)
+signal info_msg_received(msg : String)
 
 const UPDATE_INTERVAL := 0.1
 const ERROR_MSG_PREFIX := "USER ERROR: "
@@ -11,7 +12,7 @@ const WARNING_MSG_PREFIX := "USER WARNING: "
 #Any logs with three spaces at the beginning will be ignored.
 const IGNORE_PREFIX := "   " 
 
-var godot_log:FileAccess
+var godot_log : FileAccess
 
 func _ready():
 	var file_logging_enabled = ProjectSettings.get("debug/file_logging/enable_file_logging") or ProjectSettings.get("debug/file_logging/enable_file_logging.pc")

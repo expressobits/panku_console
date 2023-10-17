@@ -2,9 +2,9 @@ class_name PankuModuleManager
 
 var _modules:Array[PankuModule]
 var _modules_table:Dictionary
-var _core:PankuConsole
+var _core : PankuConsole
 
-func init_manager(_core:PankuConsole, _modules:Array[PankuModule]):
+func init_manager(_core : PankuConsole, _modules:Array[PankuModule]):
 	self._modules = _modules
 	self._core = _core
 	load_modules()

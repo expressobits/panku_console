@@ -1,7 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://cyftuo4syatlv"]
+[gd_scene load_steps=4 format=3 uid="uid://cyftuo4syatlv"]
 
 [ext_resource type="Script" path="res://addons/panku_console/console.gd" id="1_dohs1"]
+[ext_resource type="Script" path="res://addons/panku_console/modules/native_logger/module.gd" id="2_hr7xe"]
+[ext_resource type="Script" path="res://addons/panku_console/modules/native_logger/godot_log_monitor.gd" id="3_bm1aj"]
 
-[node name="Console" type="Node"]
+[node name="Console" type="Node" node_paths=PackedStringArray("native_logger")]
 process_mode = 3
 script = ExtResource("1_dohs1")
+native_logger = NodePath("NativeLogger")
+
+[node name="NativeLogger" type="Node" parent="." node_paths=PackedStringArray("native_logs_monitor")]
+script = ExtResource("2_hr7xe")
+native_logs_monitor = NodePath("../GodotLogMonitor")
+
+[node name="GodotLogMonitor" type="Node" parent="."]
+script = ExtResource("3_bm1aj")

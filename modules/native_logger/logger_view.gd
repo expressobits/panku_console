@@ -2,7 +2,7 @@ extends Control
 
 signal content_updated(bbcode:String)
 
-var console:PankuConsole
+var console : PankuConsole
 
 const MAX_LOGS = 128
 

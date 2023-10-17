@@ -1,4 +1,5 @@
-class_name PankuConsole extends Node
+extends Node
+class_name PankuConsole
 # `console.gd` is a global singleton that provides all modules with a common interface
 # you can also use some of its members to interact with the console
  
@@ -18,6 +19,9 @@ var module_manager:PankuModuleManager = PankuModuleManager.new()
 var gd_exprenv:PankuGDExprEnv = PankuGDExprEnv.new()
 
 var ui : PankuUI
+
+@export var native_logger : PankuModuleNativeLogger
+@onready var godot_log_monitor : GodotLogMonitor = $GodotLogMonitor
 
 # notification whose id>=0 will be fixed to the bottom of the notification list
 # useful for loop print
@@ -48,23 +52,23 @@ func _ready():
 	# we use a module system to manage all different features
 	# modules are invisible to each other by design to avoid coupling
 	# you can add or remove any modules here as you wish
-	var modules:Array[PankuModule] = [
-		PankuModuleNativeLogger.new(),
-#		PankuModuleScreenNotifier.new(),
-#		PankuModuleSystemReport.new(),
-#		PankuModuleHistoryManager.new(),
-#		PankuModuleEngineTools.new(),
-#		PankuModuleKeyboardShortcuts.new(),
-#		PankuModuleCheckLatestRelease.new(),
-#		PankuModuleInteractiveShell.new(),
-#		PankuModuleGeneralSettings.new(),
-#		PankuModuleDataController.new(),
-#		PankuModuleScreenCrtEffect.new(),
-#		PankuModuleExpressionMonitor.new(),
-#		PankuModuleTextureViewer.new(),
-#		PankuModuleVariableTracker.new(),
-	]
-	module_manager.init_manager(self, modules)
+#	var modules:Array[PankuModule] = [
+#		PankuModuleNativeLogger.new(),
+##		PankuModuleScreenNotifier.new(),
+##		PankuModuleSystemReport.new(),
+##		PankuModuleHistoryManager.new(),
+##		PankuModuleEngineTools.new(),
+##		PankuModuleKeyboardShortcuts.new(),
+##		PankuModuleCheckLatestRelease.new(),
+##		PankuModuleInteractiveShell.new(),
+##		PankuModuleGeneralSettings.new(),
+##		PankuModuleDataController.new(),
+##		PankuModuleScreenCrtEffect.new(),
+##		PankuModuleExpressionMonitor.new(),
+##		PankuModuleTextureViewer.new(),
+##		PankuModuleVariableTracker.new(),
+#	]
+#	module_manager.init_manager(self, modules)
 
 func _notification(what):
 	# quit event
