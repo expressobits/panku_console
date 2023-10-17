@@ -1,4 +1,4 @@
-class_name PankuConsole extends CanvasLayer
+class_name PankuConsole extends Node
 # `console.gd` is a global singleton that provides all modules with a common interface
 # you can also use some of its members to interact with the console
  
@@ -14,9 +14,10 @@ const ToggleConsoleAction = "toggle_console"
 # create_data_controller(objs:Array[Object]) -> PankuLynxWindow
 var create_data_controller_window:Callable = func(objs:Array): return null
 
-var windows_manager:PankuLynxWindowsManager
 var module_manager:PankuModuleManager = PankuModuleManager.new()
 var gd_exprenv:PankuGDExprEnv = PankuGDExprEnv.new()
+
+var ui : PankuUI
 
 # notification whose id>=0 will be fixed to the bottom of the notification list
 # useful for loop print
@@ -32,7 +33,6 @@ func _input(event: InputEvent):
 func _ready():
 	assert(get_tree().current_scene != self, "Do not run console.tscn as a scene!")
 
-	windows_manager = $LynxWindowsManager
 	var base_instance = preload("./common/repl_base_instance.gd").new()
 	base_instance._core = self
 	gd_exprenv.set_base_instance(base_instance)
@@ -50,19 +50,19 @@ func _ready():
 	# you can add or remove any modules here as you wish
 	var modules:Array[PankuModule] = [
 		PankuModuleNativeLogger.new(),
-		PankuModuleScreenNotifier.new(),
-		PankuModuleSystemReport.new(),
-		PankuModuleHistoryManager.new(),
-		PankuModuleEngineTools.new(),
-		PankuModuleKeyboardShortcuts.new(),
-		PankuModuleCheckLatestRelease.new(),
-		PankuModuleInteractiveShell.new(),
-		PankuModuleGeneralSettings.new(),
-		PankuModuleDataController.new(),
-		PankuModuleScreenCrtEffect.new(),
-		PankuModuleExpressionMonitor.new(),
-		PankuModuleTextureViewer.new(),
-		PankuModuleVariableTracker.new(),
+#		PankuModuleScreenNotifier.new(),
+#		PankuModuleSystemReport.new(),
+#		PankuModuleHistoryManager.new(),
+#		PankuModuleEngineTools.new(),
+#		PankuModuleKeyboardShortcuts.new(),
+#		PankuModuleCheckLatestRelease.new(),
+#		PankuModuleInteractiveShell.new(),
+#		PankuModuleGeneralSettings.new(),
+#		PankuModuleDataController.new(),
+#		PankuModuleScreenCrtEffect.new(),
+#		PankuModuleExpressionMonitor.new(),
+#		PankuModuleTextureViewer.new(),
+#		PankuModuleVariableTracker.new(),
 	]
 	module_manager.init_manager(self, modules)
 

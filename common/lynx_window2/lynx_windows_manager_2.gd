@@ -4,7 +4,7 @@ class_name PankuLynxWindowsManager extends Control
 const CFG_ENABLE_OS_WINDOW = "enable_os_window"
 const CFG_OS_WINDOW_BGCOLOR = "os_window_bg_color"
 
-@onready var console:PankuConsole = get_node(PankuConsole.SingletonPath)
+@onready var console : PankuConsole = get_node(PankuConsole.SingletonPath)
 
 var os_popup_btn_enabled:bool
 var os_window_bg_color:Color
@@ -31,11 +31,12 @@ func _input(e):
 			if forefront.has_method("highlight"): forefront.highlight(false)
 
 func create_window(content:Control) -> PankuLynxWindow:
-	var new_window:PankuLynxWindow = preload("lynx_window_2.tscn").instantiate()
+	var new_window : PankuLynxWindow = preload("lynx_window_2.tscn").instantiate()
 	content.anchors_preset = Control.PRESET_FULL_RECT
 	new_window.set_content(content)
 	add_child(new_window)
 	new_window.show_window()
+	print(new_window.get_path())
 	return new_window
 
 func enable_os_popup_btns(b:bool):

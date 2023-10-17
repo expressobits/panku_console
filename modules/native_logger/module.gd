@@ -14,13 +14,13 @@ func init_module():
 	output_overlay = preload("./log_overlay.tscn").instantiate()
 	output_overlay._module = self
 	output_overlay.clear()
-	core.add_child(output_overlay)
+	core.ui.add_child(output_overlay)
 
 	# add logger window
 	logger_ui = preload("./logger_view.tscn").instantiate()
 	logger_ui.console = core
 
-	window = core.windows_manager.create_window(logger_ui)
+	window = core.ui.windows_manager.create_window(logger_ui)
 	window.queue_free_on_close = false
 	window.set_window_title_text("Native Logger")
 
